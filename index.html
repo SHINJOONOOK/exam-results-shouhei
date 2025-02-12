@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>合否発表</title>
+    <script>
+        const SHEET_URL = "https://script.google.com/macros/s/AKfycbzWGtSylb74HJ7ap6m6FZPgKn0uRykqUFB4uTPNFsQiChwCfO8noxxAqNFmgZmUmHSjvg/exec";
+
+        async function checkResult() {
+            let examNumber = document.getElementById("examNumber").value;
+            let birthDate = document.getElementById("birthDate").value;
+            let resultText = "該当するデータがありません";
+
+            try {
+                let response = await fetch(SHEET_URL);
+                let data = await response.json();
+
+                if (data[examNumber] && data[examNumber].birthDate === birthDate) {
+                    resultText = data[examNumber].status;
+                }
+            } catch (error) {
+                console.error("データの取得に失敗しました", error);
+                resultText = "エラーが発生しました";
+            }
+
+            document.getElementById("result").innerText = resultText;
+        }
+    </script>
+    
+    <style>
+        body { font-family: Arial, sans-serif; }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">合否発表</h1>
+    <div style="text-align: center;">
+        <label>1. 受験番号：</label>
+        <input type="text" id="examNumber" placeholder="12345"><br><br>
+        <label>2. 生年月日：</label>
+        <input type="text" id="birthDate" placeholder="20051231"><br><br>
+        <button onclick="checkResult()">確認</button>
+        <h2 id="result"></h2>
+    </div>
+</body>
+</html>
