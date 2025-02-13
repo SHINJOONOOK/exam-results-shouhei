@@ -11,6 +11,9 @@
             let examNumber = document.getElementById("examNumber").value;
             let birthDate = document.getElementById("birthDate").value;
             let resultText = "該当するデータがありません";
+            let loadingText = "確認中です。しばらくお待ちください...";
+            
+            document.getElementById("result").innerText = loadingText;
 
             try {
                 let response = await fetch(SHEET_URL);
